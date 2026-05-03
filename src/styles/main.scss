@@ -1,0 +1,541 @@
+@use 'reset';
+@use 'variables' as *;
+@use 'mixins' as mixins;
+
+.container {
+    max-width: 1216px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    
+    @media (max-width: 1067px) {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    @media (max-width: 380px) {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    
+}
+
+body {
+    background-color: $neutral-900-color;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 48px;
+}
+
+.header {
+    &__logo {
+        display: flex;
+        gap: 10px;
+        text-decoration: none;
+
+        &-text {
+            @include mixins.text-preset-logo;
+            color: $neutral-0-color;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__units {
+        position: relative;
+        max-width: 119px;
+        max-height: 43px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background-color: $neutral-800-color;
+        cursor: pointer;
+
+        &-text {
+            @include mixins.text-preset-7;
+            color: $neutral-0-color;
+        }
+
+        &-dropdown {
+            z-index: 2;
+            top: 55px;
+            right: 0px;
+            width: 214px;
+            box-sizing: border-box;
+            position: absolute;
+            background-color: $neutral-800-color;
+            padding: 6px 8px;
+            border-radius: 12px;
+            visibility: hidden;
+
+            &.open {
+                visibility: visible;
+            }
+
+            &-btn {
+                color: $neutral-0-color;
+                @include mixins.text-preset-7;
+                background-color: transparent;
+                padding: 10px 8px;
+                margin-bottom: 4px;
+                cursor: pointer;
+                width: 100%;
+                text-align: start;
+                border-radius: 8px;
+
+                &:hover {
+                    background-color: $neutral-700-color;
+                }
+            }
+
+            &-params {
+                display: grid;
+                grid-template-columns: auto;
+                grid-template-rows: repeat(3,auto);
+                gap: 4px;
+
+                &-item {
+                    padding-bottom: 4px;
+                    border-bottom: 1px solid $neutral-600-color;
+
+                    &:last-child {
+                        border-bottom: none;
+                        padding-bottom: 0;
+                    }
+
+                    &-name {
+                        padding-left: 8px;
+                        @include mixins.text-preset-8;
+                        color: $neutral-300-color;
+                        margin-bottom: 8px;
+                    }
+
+                    &-value-metric,
+                    &-value-imper {
+                        position: relative;
+                        border-radius: 8px;
+                        @include mixins.text-preset-7;
+                        color: $neutral-0-color;
+                        padding: 10px 8px;
+
+                        &.active {
+                            background-color: $neutral-700-color;
+                        }
+
+                        &.active::after {
+                            content: '';
+                            background-image: url('/images/units-choose.svg');
+                            position: absolute;
+                            width: 15px;
+                            height: 15px;
+                            background-repeat: no-repeat;
+                            top: 15px;
+                            left: 177px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.hero {
+    &-container {
+        padding: 64px 0 80px 0;
+
+        @media (max-width: 500px) {
+            padding: 48px 0 48px 0;
+        }
+    }
+
+    &__title {
+        @include mixins.text-preset-2;
+        color: $neutral-0-color;
+        text-align: center;
+    }
+
+    &__search {
+        display: flex;
+        gap: 16px;
+        justify-self: center;
+        margin-top: 64px;
+
+        @media (max-width: 700px) {
+            flex-wrap: wrap;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 410px) {
+            max-width: 343px;
+        }
+
+        &-input {
+            display: flex;
+            gap: 16px;
+            min-width: 526px;
+            max-height: 56px;
+            padding: 18px 24px;
+            border-radius: 12px;
+            background-color: $neutral-800-color;
+            box-sizing: border-box;
+            align-items: center;
+            cursor: pointer;
+
+            @media (max-width: 700px) {
+                width: 100%;
+            }
+
+            @media (max-width: 590px) {
+                min-width: 343px;
+            }
+
+            @media (max-width: 410px) {
+                min-width: 300px;
+            }
+
+            &-field {
+                width: 300px;
+                height: 24px;
+                @include mixins.text-preset-5-medium;
+                color: $neutral-200-color;
+
+                &::placeholder {
+                    @include mixins.text-preset-5-medium;
+                    color: $neutral-200-color;
+                }
+            }
+        }
+
+        &-btn {
+            padding: 16px 24px;
+            background-color: $blue-500-color;
+            border-radius: 12px;
+            color: $neutral-0-color;
+            @include mixins.text-preset-5-medium;
+            cursor: pointer;
+
+            @media (max-width: 700px) {
+                width: 100%;
+            }
+        }
+    }
+
+    &__forecast {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr;
+        margin-top: 48px;
+        gap: 32px;
+
+        @media (max-width: 1067px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+        }
+
+        &.hidden {
+            display: none;
+        }
+
+        &-main {
+            max-width: 800px;
+
+            @media (max-width: 1067px) {
+                justify-self: center;
+            }
+
+            &-now {
+                padding: 80px 24px;
+                background-image: url("/images/bg-today-large.svg");
+                background-repeat: no-repeat;
+                border-radius: 20px;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                @media (max-width: 510px) {
+                    padding: 41px 24.5px 41px 24.5px;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
+                &-place {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    color: $neutral-0-color;
+
+                    &-location {
+                        @include mixins.text-preset-4;
+                    }
+
+                    &-date {
+                        @include mixins.text-preset-6;
+                    }
+                }
+
+                &-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+
+                    &-img {
+                        width: 120px;
+                        height: 120px;
+                    }
+
+                    &-temp {
+                        @include mixins.text-preset-1;
+                        color: $neutral-0-color;
+                    }
+                    
+                }
+            }
+
+            &-stats {
+                margin-top: 32px;
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                grid-template-rows: 1fr;
+                gap: 24px;
+
+                @media (max-width: 700px) {
+                    grid-template-columns: 1fr 1fr;
+                    grid-template-rows: 1fr 1fr;
+                    gap: 16px;
+                }
+
+                &-item {
+                    background-color: $neutral-800-color;
+                    padding: 20px;
+                    border-radius: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+
+                    &-name {
+                        @include mixins.text-preset-6;
+                        color: $neutral-200-color;
+                    }
+
+                    &-value-fl, &-value-hm, &-value-wnd, &-value-prc{
+                        @include mixins.text-preset-3;
+                        color: $neutral-0-color;
+                    }
+                }
+            }
+
+            &-daily {
+                margin-top: 48px;
+
+                &-title {
+                    @include mixins.text-preset-5;
+                    color: $neutral-0-color;
+                }
+
+                &-grid {
+                    margin-top: 20px;
+                    display: grid;
+                    grid-template-columns: repeat(7,1fr);
+                    grid-template-rows: 1fr;
+                    gap: 16px;
+
+                    @media (max-width: 700px) {
+                        grid-template-columns: repeat(3,1fr);
+                        grid-template-rows: repeat(3,1fr);
+                    }
+
+                    &-item {
+                        padding: 16px 10px;
+                        background-color: $neutral-800-color;
+                        border-radius: 12px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        align-items: center;
+
+                        &-day-1,
+                        &-day-2,
+                        &-day-3,
+                        &-day-4,
+                        &-day-5,
+                        &-day-6,
+                        &-day-7 {
+                            @include mixins.text-preset-6;
+                            color: $neutral-0-color;
+                        }
+
+                        &-img-1,
+                        &-img-2,
+                        &-img-3,
+                        &-img-4,
+                        &-img-5,
+                        &-img-6,
+                        &-img-7 {
+                            width: 60px;
+                            height: 60px;
+                        }
+
+                        &-temp-1, 
+                        &-temp-2,
+                        &-temp-3,
+                        &-temp-4,
+                        &-temp-5,
+                        &-temp-6,
+                        &-temp-7 {
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            @include mixins.text-preset-7;
+                            color: $neutral-0-color;
+                        }
+                    }
+                }
+            }
+        }
+
+        &-hourly {
+            position: relative;
+            background-color: $neutral-800-color;
+            padding: 24px;
+            border-radius: 20px;
+
+            &-title {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                cursor: pointer;
+
+                &-name {
+                    @include mixins.text-preset-5;
+                    color: $neutral-0-color;
+                    align-self: center;
+                }
+
+                &-week {
+                    &-day {
+                        display: flex;
+                        gap: 12px;
+                        max-width: 120px;
+                        background-color: $neutral-600-color;
+                        border-radius: 8px;
+                        padding: 8px 16px;
+
+                        &-name {
+                            @include mixins.text-preset-7;
+                            line-height: 100%;
+                            color: $neutral-0-color;
+                        }
+
+                        &-img {
+                            align-self: center;
+                        }
+                    }
+
+                    &-days-dropdown {
+                        visibility: hidden;
+                        border: 1px solid $neutral-600-color;
+                        position: absolute;
+                        right: 24px;
+                        top: 64px;
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        grid-template-rows: repeat(7,1fr);
+                        gap: 4px;
+                        padding: 8px;
+                        border-radius: 12px;
+                        background-color: $neutral-800-color;
+
+                        &.open {
+                            visibility: visible
+                        }
+
+                        &-item {
+                            @include mixins.text-preset-7;
+                            color: $neutral-0-color;
+                            padding: 10px 8px;
+                            width: 198px;
+                            cursor: pointer;
+
+                            &:hover {
+                                background-color: $neutral-700-color;
+                                border-radius: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &-grid {
+                gap: 16px;
+                margin-top: 16px;
+                max-height: 608px;
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(12,1fr);
+                overflow-y: scroll;
+
+                &-item {
+                    padding: 10px 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background-color: $neutral-700-color;
+                    border-radius: 8px;
+                    max-width: 100%;
+
+                    &-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+
+                        &-img-1,
+                        &-img-2,
+                        &-img-3,
+                        &-img-4,
+                        &-img-5,
+                        &-img-6,
+                        &-img-7,
+                        &-img-8,
+                        &-img-9,
+                        &-img-10,
+                        &-img-11,
+                        &-img-12 {
+                            width: 40px;
+                            height: 40px;
+                        }
+
+                        &-time {
+                            @include mixins.text-preset-5-medium;
+                            color: $neutral-0-color;
+                        }
+                    }
+                    
+
+                    &-temp-1,
+                    &-temp-2,
+                    &-temp-3,
+                    &-temp-4,
+                    &-temp-5,
+                    &-temp-6,
+                    &-temp-7,
+                    &-temp-8,
+                    &-temp-9,
+                    &-temp-10,
+                    &-temp-11,
+                    &-temp-12 {
+                        @include mixins.text-preset-7;
+                        color: $neutral-0-color;
+                    }
+                }
+            }
+        }
+    }
+}

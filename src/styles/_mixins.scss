@@ -1,0 +1,71 @@
+@use 'variables' as *;
+
+@mixin text-preset-logo {
+    font-family: 'bg-bold', Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-1 {
+    font-family: 'dm-sans-semibold-italic', Arial, Helvetica, sans-serif;
+    font-size: 96px;
+    line-height: 100%;
+    letter-spacing: -2px;
+}
+
+@mixin text-preset-2 {
+    font-family: 'bg-bold', Arial, Helvetica, sans-serif;
+    font-size: 52px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-3 {
+    font-family: 'dm-sans-light', Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-4 {
+    font-family: 'dm-sans-bold', Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-5 {
+    font-family: 'dm-sans-semibold', Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-5-medium {
+    font-family: 'dm-sans-medium', Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-6 {
+    font-family: 'dm-sans-medium', Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-7 {
+    font-family: 'dm-sans-medium', Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
+
+@mixin text-preset-8 {
+    font-family: 'dm-sans-medium', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0px;
+}
