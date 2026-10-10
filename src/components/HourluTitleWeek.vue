@@ -28,10 +28,12 @@ import { onClickOutside } from '@vueuse/core';
 const isOpen = ref(false)
 const dropdownRef = ref(null)
 const selectedDay = ref('Tuesday')
+const emit = defineEmits(['select-day'])
 
 const selectNewDay = (newDay) => {
     selectedDay.value = newDay
     isOpen.value = false
+    emit('select-day', newDay)  
 }
 
 const toggleOpen = () => {
@@ -65,7 +67,6 @@ const weekDays = computed(() => [
         dayName: 'Sunday'
     }
 ])
-
 
 </script>
 

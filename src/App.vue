@@ -69,7 +69,11 @@
           </div>
 
           <div class="hero__forecast-hourly-wrapper">
-            <Hourly/>
+            <Hourly
+            v-if="hourlyData"
+            :hourly="hourlyData"
+            @select-day="onDaySelected"
+            />
           </div>
           
         </div>
@@ -84,7 +88,7 @@ import { ref, computed }  from 'vue'
 import SearchBar from './components/searchBar.vue';
 import MainStats from './components/mainStats.vue';
 import MainDailyGrid from './components/mainDailyGrid.vue';
-import Hourly from './components/hourly.vue';
+import Hourly from './components/Hourly.vue';
 import HeaderUnits from './components/HeaderUnits.vue';
 
 // ------------------------------------------------------------------------
@@ -133,6 +137,11 @@ const dayTempMax6 = ref('')
 const dayTempMin6 = ref('')
 
 const currentdayName = ref('')
+const rawHourly = ref(null)        
+const selectedDayIndex = ref(0)    
+const todayDayName = ref('')
+
+const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -173,7 +182,14 @@ const searchCity = async (cityName) => {
     const units = weatherData.current_units;
     const daily = weatherData.daily;
     const hourly = weatherData.hourly;
-    
+    const cur_day = currentDay(weatherData.current.time)
+
+    rawHourly.value = weatherData.hourly
+    selectedDayIndex.value = 0
+
+    const today = new Date(weatherData.current.time)
+    todayDayName.value = today.toLocaleDateString('en-US', { weekday: 'long' })
+
     updateWeatherUi(name, country, current, units, daily, hourly)
 
     } catch (error) {
@@ -247,6 +263,18 @@ function getWeatherIcon(weatherCode) {
     }
 }
 
+//Форматирование времени (часы) под дизайн
+function formatHour(isoString) {
+  const date = new Date(isoString)
+  let hours = date.getHours()
+
+  const period = hours >= 12 ? 'PM' : 'AM'
+
+  hours = hours % 12
+
+  return `${hours} ${period}`
+}
+
 // Форматирование дня недели под дизайн
 function formatDay(isoString) {
     const date = new Date(isoString);
@@ -271,6 +299,32 @@ function currentDay(isoString) {
     const currday = dayNames.indexOf(dayName)
 
     return currday
+}
+
+function getDayIndex(selectedDayName, todayName) {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  const todayIdx = days.indexOf(todayName)
+  const selectedIdx = days.indexOf(selectedDayName)
+  return (selectedIdx - todayIdx + 7) % 7
+}
+
+function getHourlyForDay(hourly, dayIndex) {
+  const hours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
+  const baseIndex = dayIndex * 24
+
+  return hours.map(hour => {
+    const index = baseIndex + hour
+
+    return {
+      icon: String(getWeatherIcon(hourly.weather_code[index])),
+      time: String(formatHour(hourly.time[index])),
+      temp: String(Math.round(hourly.temperature_2m[index])) + '°',
+    }
+  })
+}
+
+function onDaySelected(dayName) {
+  selectedDayIndex.value = getDayIndex(dayName, todayDayName.value)
 }
 
 //Рендер данных, полученных от api
@@ -323,7 +377,7 @@ function updateWeatherUi(name, country, current, units, daily, hourly) {
   dayTempMin6.value = `${Math.round(daily.temperature_2m_min[6])}°`
   // -----------------------------------------------------------------------------
 
-  isHidden.value = false 
+  isHidden.value = false
 }
 
 // ------------------------------------------------------------------------
@@ -399,6 +453,11 @@ const mainDailyGridCards = computed(() => [
     dayTempMin: dayTempMin6.value
   }
 ])
+
+const hourlyData = computed(() => {
+  if (!rawHourly.value) return null
+  return getHourlyForDay(rawHourly.value, selectedDayIndex.value)
+})
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
