@@ -3,10 +3,10 @@
         <div class="header__units-dropdown-params-item-name">
             {{ itemName }}
         </div>
-        <div class="header__units-dropdown-params-item-value-metric active" :id="itemIdMetric">
+        <div class="header__units-dropdown-params-item-value-metric" :id="itemIdMetric" :class="{active: isMetric}">
             {{ itemValueMetric }}
         </div>
-        <div class="header__units-dropdown-params-item-value-imper" :id="itemIdImper">
+        <div class="header__units-dropdown-params-item-value-imper" :id="itemIdImper" :class="{active: !isMetric}">
             {{ itemValueImper }}
         </div>
     </div>
@@ -18,7 +18,8 @@ defineProps({
     itemValueMetric: String,
     itemValueImper: String,
     itemIdMetric: String,
-    itemIdImper: String
+    itemIdImper: String,
+    isMetric: Boolean
 })
 
 </script>

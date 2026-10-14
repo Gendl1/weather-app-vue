@@ -12,9 +12,9 @@
             <img src="/images/units-arrow.svg">
         </div>
 
-        <div class="header__units-dropdown" :class="{ open: isOpen }">
-            <button class="header__units-dropdown-btn">
-                Switch to Imperial
+        <div class="header__units-dropdown" :class="{ open: isOpen }" @click.stop>
+            <button class="header__units-dropdown-btn" @click ="toggleSystem">
+                {{ switchLabel }}
             </button>
 
             <div class="header__units-dropdown-params">
@@ -25,6 +25,7 @@
                 :itemValueImper="item.itemValueImper"
                 :itemIdMetric="item.itemIdMetric"
                 :itemIdImper="item.itemIdImper"
+                :isMetric="isMetric"
                 />
             </div>
         </div>
@@ -38,9 +39,27 @@ import { onClickOutside } from '@vueuse/core';
 
 const isOpen = ref(false)
 const dropdownRef = ref(null)
+const isMetric = ref(true)
+
+const props = defineProps({
+    isMetric: {
+        type: Boolean,
+        required: true
+    }
+})
+
+const emit = defineEmits(['change-units'])
+
+const switchLabel = computed(() =>
+    isMetric.value ? 'Switch to Imperial' : 'Switch to Metric'
+) 
 
 const toggleOpen = () => {
     isOpen.value = !isOpen.value
+}
+
+const toggleSystem = () => {
+    emit('change-units', !props.isMetric)
 }
 
 onClickOutside(dropdownRef, () => {

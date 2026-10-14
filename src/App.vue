@@ -11,7 +11,10 @@
           </div>
         </a>
 
-        <HeaderUnits/>
+        <HeaderUnits
+        :is-metric="isMetric"
+        @change-units="onUnitsChange"
+        />
       </div>
     </header>
 
@@ -98,12 +101,12 @@ const isHidden = ref(true)
 const currentCity = ref('')
 const currenCountry = ref('')
 const currentDate = ref('')
-const currentTemp = ref('')
 const currentWeatherIcon = ref('')
-const currentFl = ref('')
-const currentHm = ref('')
-const currentWnd = ref('')
-const currentPrec = ref('')
+
+const rawFeelsLike = ref(null)      
+const rawHumidity = ref(null)       
+const rawWind = ref(null)           
+const rawPrecipitation = ref(null)  
 
 const dayName0 = ref('')
 const dayName1 = ref('')
@@ -121,27 +124,15 @@ const dayIcon4 = ref('')
 const dayIcon5 = ref('')
 const dayIcon6 = ref('')
 
-const dayTempMax0 = ref('')
-const dayTempMin0 = ref('')
-const dayTempMax1 = ref('')
-const dayTempMin1 = ref('')
-const dayTempMax2 = ref('')
-const dayTempMin2 = ref('')
-const dayTempMax3 = ref('')
-const dayTempMin3 = ref('')
-const dayTempMax4 = ref('')
-const dayTempMin4 = ref('')
-const dayTempMax5 = ref('')
-const dayTempMin5 = ref('')
-const dayTempMax6 = ref('')
-const dayTempMin6 = ref('')
+const rawDailyMax = ref([])  
+const rawDailyMin = ref([])  
 
 const currentdayName = ref('')
 const rawHourly = ref(null)        
 const selectedDayIndex = ref(0)    
 const todayDayName = ref('')
-
-const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const isMetric = ref(true)
+const rawCurrentTemp = ref(null)
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -182,7 +173,6 @@ const searchCity = async (cityName) => {
     const units = weatherData.current_units;
     const daily = weatherData.daily;
     const hourly = weatherData.hourly;
-    const cur_day = currentDay(weatherData.current.time)
 
     rawHourly.value = weatherData.hourly
     selectedDayIndex.value = 0
@@ -301,6 +291,7 @@ function currentDay(isoString) {
     return currday
 }
 
+//Получение индекса дня
 function getDayIndex(selectedDayName, todayName) {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const todayIdx = days.indexOf(todayName)
@@ -308,6 +299,7 @@ function getDayIndex(selectedDayName, todayName) {
   return (selectedIdx - todayIdx + 7) % 7
 }
 
+//Получение почасового прогноза по инексу выбранного дняы
 function getHourlyForDay(hourly, dayIndex) {
   const hours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
   const baseIndex = dayIndex * 24
@@ -316,15 +308,27 @@ function getHourlyForDay(hourly, dayIndex) {
     const index = baseIndex + hour
 
     return {
-      icon: String(getWeatherIcon(hourly.weather_code[index])),
-      time: String(formatHour(hourly.time[index])),
-      temp: String(Math.round(hourly.temperature_2m[index])) + '°',
+      icon: getWeatherIcon(hourly.weather_code[index]),
+      time: formatHour(hourly.time[index]),
+      temp: formatTemp(hourly.temperature_2m[index])
     }
   })
 }
 
 function onDaySelected(dayName) {
   selectedDayIndex.value = getDayIndex(dayName, todayDayName.value)
+}
+
+function onUnitsChange(metric) {
+  isMetric.value = metric
+}
+
+//Функция перевода температуры
+function formatTemp(celsius) {
+  const temp = isMetric.value
+    ? celsius
+    : celsius * 9 / 5 + 32
+  return `${Math.round(temp)}°`
 }
 
 //Рендер данных, полученных от api
@@ -334,12 +338,14 @@ function updateWeatherUi(name, country, current, units, daily, hourly) {
   currentCity.value = name
   currenCountry.value = country
   currentDate.value = formatDate(current.time)
-  currentTemp.value = `${Math.round(current.temperature_2m)}°`
+  rawCurrentTemp.value = current.temperature_2m
   currentWeatherIcon.value = getWeatherIcon(current.weather_code)
-  currentFl.value = `${Math.round(current.apparent_temperature)}°`
-  currentHm.value = `${Math.round(current.relative_humidity_2m)} ${units.relative_humidity_2m}`
-  currentWnd.value = `${Math.round(current.wind_speed_10m)} ${units.wind_speed_10m}`
-  currentPrec.value = `${Math.round(current.precipitation)} ${units.precipitation}`
+
+  rawFeelsLike.value = current.apparent_temperature
+  rawHumidity.value = current.relative_humidity_2m
+  rawWind.value = current.wind_speed_10m
+  rawPrecipitation.value = current.precipitation
+
   currentdayName.value = currentDay(current.time)
   // -----------------------------------------------------------------------------
 
@@ -361,21 +367,8 @@ function updateWeatherUi(name, country, current, units, daily, hourly) {
   dayIcon5.value = getWeatherIcon(daily.weather_code[5])
   dayIcon6.value = getWeatherIcon(daily.weather_code[6])
 
-  dayTempMax0.value = `${Math.round(daily.temperature_2m_max[0])}°`
-  dayTempMin0.value = `${Math.round(daily.temperature_2m_min[0])}°`
-  dayTempMax1.value = `${Math.round(daily.temperature_2m_max[1])}°`
-  dayTempMin1.value = `${Math.round(daily.temperature_2m_min[1])}°`
-  dayTempMax2.value = `${Math.round(daily.temperature_2m_max[2])}°`
-  dayTempMin2.value = `${Math.round(daily.temperature_2m_min[2])}°`
-  dayTempMax3.value = `${Math.round(daily.temperature_2m_max[3])}°`
-  dayTempMin3.value = `${Math.round(daily.temperature_2m_min[3])}°`
-  dayTempMax4.value = `${Math.round(daily.temperature_2m_max[4])}°`
-  dayTempMin4.value = `${Math.round(daily.temperature_2m_min[4])}°`
-  dayTempMax5.value = `${Math.round(daily.temperature_2m_max[5])}°`
-  dayTempMin5.value = `${Math.round(daily.temperature_2m_min[5])}°`
-  dayTempMax6.value = `${Math.round(daily.temperature_2m_max[6])}°`
-  dayTempMin6.value = `${Math.round(daily.temperature_2m_min[6])}°`
-  // -----------------------------------------------------------------------------
+  rawDailyMax.value = daily.temperature_2m_max
+  rawDailyMin.value = daily.temperature_2m_min
 
   isHidden.value = false
 }
@@ -388,7 +381,7 @@ function updateWeatherUi(name, country, current, units, daily, hourly) {
 
 
 // ------------------------------------------------------------------------
-//                        Методы для прокидывания props 
+//                            Computed методы
 // ------------------------------------------------------------------------
 const mainStatsCards = computed(() => [
   {
@@ -409,54 +402,65 @@ const mainStatsCards = computed(() => [
   }
 ])
 
-const mainDailyGridCards = computed(() => [
-  {
-    dayName: dayName0.value,
-    icon: dayIcon0.value,
-    dayTempMax: dayTempMax0.value,
-    dayTempMin: dayTempMin0.value
-  },
-  {
-    dayName: dayName1.value,
-    icon: dayIcon1.value,
-    dayTempMax: dayTempMax1.value,
-    dayTempMin: dayTempMin1.value
-  },
-  {
-    dayName: dayName2.value,
-    icon: dayIcon2.value,
-    dayTempMax: dayTempMax2.value,
-    dayTempMin: dayTempMin2.value
-  },
-  {
-    dayName: dayName3.value,
-    icon: dayIcon3.value,
-    dayTempMax: dayTempMax3.value,
-    dayTempMin: dayTempMin3.value
-  },
-  {
-    dayName: dayName4.value,
-    icon: dayIcon4.value,
-    dayTempMax: dayTempMax4.value,
-    dayTempMin: dayTempMin4.value
-  },
-  {
-    dayName: dayName5.value,
-    icon: dayIcon5.value,
-    dayTempMax: dayTempMax5.value,
-    dayTempMin: dayTempMin5.value
-  },
-  {
-    dayName: dayName6.value,
-    icon: dayIcon6.value,
-    dayTempMax: dayTempMax6.value,
-    dayTempMin: dayTempMin6.value
-  }
-])
+const mainDailyGridCards = computed(() => {
+  const names = [
+    dayName0.value, dayName1.value, dayName2.value,
+    dayName3.value, dayName4.value, dayName5.value, dayName6.value
+  ]
+  const icons = [
+    dayIcon0.value, dayIcon1.value, dayIcon2.value,
+    dayIcon3.value, dayIcon4.value, dayIcon5.value, dayIcon6.value
+  ]
+
+  return names.map((dayName, i) => ({
+    dayName,
+    icon: icons[i],
+    dayTempMax: formatTemp(rawDailyMax.value[i]),
+    dayTempMin: formatTemp(rawDailyMin.value[i])
+  }))
+})
 
 const hourlyData = computed(() => {
   if (!rawHourly.value) return null
   return getHourlyForDay(rawHourly.value, selectedDayIndex.value)
+})
+
+const currentTemp = computed(() => {
+
+  const temp = isMetric.value
+    ? rawCurrentTemp.value
+    : rawCurrentTemp.value * 9 / 5 + 32
+
+  return `${Math.round(temp)}°`
+})
+
+const currentFl = computed(() => {
+  const temp = isMetric.value
+    ? rawFeelsLike.value
+    : rawFeelsLike.value * 9 / 5 + 32
+  return `${Math.round(temp)}°`
+})
+
+const currentHm = computed(() => {
+  return `${Math.round(rawHumidity.value)} %`
+})
+
+const currentWnd = computed(() => {
+  const speed = isMetric.value
+    ? rawWind.value
+    : rawWind.value * 0.621371
+  const unit = isMetric.value ? 'km/h' : 'mph'
+  return `${Math.round(speed)} ${unit}`
+})
+
+const currentPrec = computed(() => {
+  const value = isMetric.value
+    ? rawPrecipitation.value
+    : Math.round(rawPrecipitation.value / 25.4)
+
+  const unit = isMetric.value ? 'mm' : 'in'
+  
+  return `${value} ${unit}`
 })
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
