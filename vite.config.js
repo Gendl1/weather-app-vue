@@ -17,5 +17,7 @@ export default defineConfig({
         additionalData: ''
       }
     }
-  }
+  },
+
+  base: '/weather-app-vue/'
 })
