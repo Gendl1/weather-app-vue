@@ -12,8 +12,8 @@
             <img src="/images/units-arrow.svg">
         </div>
 
-        <div class="header__units-dropdown" :class="{ open: isOpen }" @click.stop>
-            <button class="header__units-dropdown-btn" @click ="toggleSystem">
+        <div class="header__units-dropdown" :class="{ open: isOpen }">
+            <button class="header__units-dropdown-btn" @click.stop ="toggleSystem">
                 {{ switchLabel }}
             </button>
 
@@ -39,7 +39,6 @@ import { onClickOutside } from '@vueuse/core';
 
 const isOpen = ref(false)
 const dropdownRef = ref(null)
-const isMetric = ref(true)
 
 const props = defineProps({
     isMetric: {
