@@ -2,7 +2,7 @@
     <div class="hero__search">
         <div class="hero__search-input">
             <div class="hero__search-input-img">
-                <img src="/images/icon-search.svg">
+                <UiIcon name="search"/>
             </div>
 
             <input v-model="cityInput" 
@@ -20,7 +20,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import UiIcon from '@/shared/ui/Icon/ui-icon.vue';
 
 const cityInput = ref('')
 

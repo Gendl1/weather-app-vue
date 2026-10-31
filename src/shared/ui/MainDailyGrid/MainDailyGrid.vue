@@ -5,7 +5,7 @@
         </span>
 
         <div class="hero__forecast-main-daily-grid-item-img-1">
-            <img :src="icon">
+            <UiIcon  :name="icon"/>
         </div>
 
         <div class="hero__forecast-main-daily-grid-item-temp-1">
@@ -16,6 +16,8 @@
 </template>
 
 <script setup>
+import UiIcon from '@/shared/ui/icon/ui-icon.vue';
+
 defineProps({
     dayName: String,
     icon: String,

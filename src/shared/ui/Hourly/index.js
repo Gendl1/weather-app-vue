@@ -1,0 +1,1 @@
+export { default as Hourly } from './Hourly.vue'

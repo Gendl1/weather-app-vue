@@ -6,7 +6,7 @@
             </span>
 
             <div class="hero__forecast-hourly-title-week-day-img">
-                <img src="/images/icon-dropdown.svg">
+                <UiIcon name="dropdown"/>
             </div>
         </div>
 
@@ -23,6 +23,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import HourlyTitleWeekDropdown from './HourlyTitleWeekDropdown.vue';
+import UiIcon from '@/shared/ui/Icon/ui-icon.vue';
 import { onClickOutside } from '@vueuse/core';
 
 const isOpen = ref(false)

@@ -4,7 +4,7 @@
       <div class="header-container container">
         <a class="header__logo" href="#">
           <div class="header__logo-img">
-            <img src="/images/logo.svg">
+            <UiIcon name="logo"/>
           </div>
           <div class="header__logo-text">
             <h2>Weather Now</h2>
@@ -36,7 +36,7 @@
 
               <div class="hero__forecast-main-now-info">
                 <div class="hero__forecast-main-now-info-img">
-                  <img :src="currentWeatherIcon">
+                  <UiIcon v-if="currentWeatherIcon" :name="currentWeatherIcon"/>
                 </div>
                 <span class="hero__forecast-main-now-info-temp">{{ currentTemp }}</span>
               </div>
@@ -87,12 +87,13 @@
 </template>
 
 <script setup>
-import { ref, computed }  from 'vue'
-import SearchBar from './components/searchBar.vue';
-import MainStats from './components/mainStats.vue';
-import MainDailyGrid from './components/mainDailyGrid.vue';
-import Hourly from './components/Hourly.vue';
-import HeaderUnits from './components/HeaderUnits.vue';
+import { ref, computed }  from 'vue';
+import { SearchBar } from '@/shared/ui/SearchBar';
+import { MainStats } from '@/shared/ui/MainStats';
+import { MainDailyGrid } from '@/shared/ui/MainDailyGrid';
+import { Hourly } from '@/shared/ui/Hourly';
+import { HeaderUnits } from '@/shared/ui/HeaderUnits';
+import UiIcon from '@/shared/ui/icon/ui-icon.vue';
 
 // ------------------------------------------------------------------------
 //                             Реактивные переменные  
@@ -217,39 +218,39 @@ function formatDate(isoString) {
 //Получение иконки по коду погоды
 function getWeatherIcon(weatherCode) {
     if (weatherCode === 0) {
-        return './images/icon-sunny.webp'
+        return 'sunny'
     }
 
     else if (weatherCode === 1 || weatherCode === 2) {
-        return './images/icon-partly-cloudy.webp'
+        return 'p_cloudy'
     }
 
     else if (weatherCode === 3) {
-        return './images/icon-overcast.webp'
+        return 'overcast'
     }
 
     else if (weatherCode === 45 || weatherCode === 48) {
-        return './images/icon-fog.webp'
+        return 'fog'
     }
 
     else if (weatherCode >= 51 && weatherCode <= 55) {
-        return './images/icon-drizzle.webp'
+        return 'drizzle'
     }
 
     else if ((weatherCode >= 61 && weatherCode <= 65) || (weatherCode >= 80 && weatherCode <= 82)) {
-        return './images/icon-rain.webp'
+        return 'rain'
     }
 
     else if ((weatherCode >= 71 && weatherCode <= 75) || (weatherCode === 85 || weatherCode === 86)) {
-        return './images/icon-snow.webp'
+        return 'snow'
     }
 
     else if (weatherCode >= 95 && weatherCode <= 99) {
-        return './images/icon-storm.webp'
+        return 'storm'
     }
 
     else {
-        return './images/icon-sunny.webp'
+        return 'sunny'
     }
 }
 

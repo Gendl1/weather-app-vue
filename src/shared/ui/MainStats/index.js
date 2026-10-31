@@ -1,0 +1,1 @@
+export { default as MainStats } from './MainStats.vue'

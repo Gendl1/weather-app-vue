@@ -1,7 +1,7 @@
 <template>
     <div class="header__units" @click="toggleOpen" ref="dropdownRef">
         <div class="header__units-img">
-            <img src="/images/units-img.svg">
+            <UiIcon name="units_img"/>
         </div>
 
         <div class="header__units-text">
@@ -9,7 +9,7 @@
         </div>
 
         <div class="header__units-arrow">
-            <img src="/images/units-arrow.svg">
+            <UiIcon name="units_arrow"/>
         </div>
 
         <div class="header__units-dropdown" :class="{ open: isOpen }" @click.stop>
@@ -35,6 +35,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import UnitsDropdownItem from './UnitsDropdownItem.vue';
+import UiIcon from '@/shared/ui/Icon/ui-icon.vue';
 import { onClickOutside } from '@vueuse/core';
 
 const isOpen = ref(false)

@@ -26,7 +26,7 @@
 <script setup>
 import { computed } from 'vue';
 import HourlyGrid from './HourlyGrid.vue';
-import HourlyTitleWeek from './HourluTitleWeek.vue'
+import HourlyTitleWeek from './HourlyTitleWeek.vue'
 
 const props = defineProps({
     hourly: {
